@@ -7,13 +7,14 @@
  * @stack: a pointer to the top of a stack.
  * @line_num: the line number with the instructions.
  */
-void pall(struct_t **stack, unsigned int line_num)
+void pall(stack_t **stack, unsigned int line_num)
 {
+	stack_t *curr = *stack;
 	(void)line_num;
 
-	while (*stack)
+	while (curr)
 	{
-		printf("%d\n", *stack->n);
-		*stack = (*stack)->next;
+		printf("%d\n", curr->n);
+		curr = curr->next;
 	}
 }

@@ -9,16 +9,20 @@
 void push(stack_t **stack, unsigned int line_num)
 {
 	int value;
+	char *token;
+	stack_t *new_node;
 
-	value = atoi(strtok(NULL, " \n"));
+	token = strtok(NULL, " \n\t");
 
-	if (!value)
+	if (!token)
 	{
 		fprintf(stderr, "L%d: usage: push integer\n", line_num);
 		exit(EXIT_FAILURE);
 	}
 
-	stack_t *new_node = malloc(sizeof(stack_t));
+	value = atoi(token);
+
+	new_node = malloc(sizeof(stack_t));
 
 	if (new_node == NULL)
 	{
