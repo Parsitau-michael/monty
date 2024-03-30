@@ -1,19 +1,15 @@
 #include "monty.h"
-extern stack_t *stack;
-/*
+/**
  * handleop - a function that handles opcodes.
- * @argv: an array of arguments passed to the main.
+ * @stack: a pointer to the stack.
+ * @line: an array of arguments passed to the main.
+ * @line_num: the line number with the instruction.
  */
-void handleop(char *argv[])
+void handleop(stack_t **stack, char *line, unsigned int line_num)
 {
-	FILE *fd;
-	char *line = NULL;
-	size_t len = 0;
-	unsigned int line_num = 0;
 	char *token = NULL;
 	int i;
 
-	stack_t *stack = {NULL};
 	instruction_t func_codes[] = {
 		{"push", push},
 		{"pall", pall},
@@ -29,21 +25,19 @@ void handleop(char *argv[])
 		{NULL, NULL}
 	};
 
-	fd = fopen(argv[1], "r");
-	if (fd == NULL)
+	token = strtok(line, " \n\t");
+	if (token != NULL)
 	{
-		fprintf(stderr, "Error: Can't open file %s", argv[1]);
+		for (i = 0; func_codes[i].opcode; i++)
+		{
+			if (strcmp(token, func_codes[i].opcode) == 0)
+			{
+				func_codes[i].f(stack, line_num);
+				return;
+			}
+
+		}
+		fprintf(stderr, "L%d: unknown instruction %s\n", line_num, token);
 		exit(EXIT_FAILURE);
 	}
-	while (getline(&line, &len, fd) != -1)
-	{
-		line_num++;
-		token = strtok(line, " \n\t");
-		if (token != NULL)
-			for (i = 0; func_codes[i].opcode; i++)
-				if (strcmp(token, func_codes[i].opcode) == 0)
-					func_codes[i].f(&stack, line_num);
-	}
-	free(line);
-	fclose(fd);
 }

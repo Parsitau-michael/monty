@@ -25,6 +25,8 @@ typedef struct stack_s
 	struct stack_s *next;
 } stack_t;
 
+extern stack_t *stack;
+
 /**
  * struct instruction_s - opcode and its function
  * @opcode: the opcode
@@ -38,6 +40,7 @@ typedef struct instruction_s
         char *opcode;
         void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
+
 
 ssize_t getline(char **lineptr, size_t *n, FILE *stream);
 
@@ -54,7 +57,7 @@ void mul(stack_t **stack, unsigned int line_num);
 void mod(stack_t **stack, unsigned int line_num);
 void pchar(stack_t **stack, unsigned int line_num);
 void pstr(stack_t **stack, unsigned int line_num);
-void handleop(char *argv[]);
-
+void handleop(stack_t **stack, char *line, unsigned int line_num);
+void _free(stack_t *stack);
 
 #endif /** MONTY_H **/
